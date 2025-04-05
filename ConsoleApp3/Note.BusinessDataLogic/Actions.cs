@@ -10,6 +10,7 @@ namespace Note.BusinessDataLogic
     {
         AddNote,
         DeleteNote,
+        UpdateNote,
         View
 
     }

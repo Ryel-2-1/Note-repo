@@ -9,3 +9,4 @@ C:\Users\Admin PC\source\repos\Note-repo\ConsoleApp3\Note.BusinessDataLogic\obj\
 C:\Users\Admin PC\source\repos\Note-repo\ConsoleApp3\Note.BusinessDataLogic\obj\Debug\net8.0\refint\Note.BusinessDataLogic.dll
 C:\Users\Admin PC\source\repos\Note-repo\ConsoleApp3\Note.BusinessDataLogic\obj\Debug\net8.0\Note.BusinessDataLogic.pdb
 C:\Users\Admin PC\source\repos\Note-repo\ConsoleApp3\Note.BusinessDataLogic\obj\Debug\net8.0\ref\Note.BusinessDataLogic.dll
+C:\Users\Admin PC\source\repos\Note-repo\ConsoleApp3\Note.BusinessDataLogic\obj\Debug\net8.0\Note.BusinessDataLogic.sourcelink.json

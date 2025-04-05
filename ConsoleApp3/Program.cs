@@ -4,8 +4,7 @@ using Note.BusinessDataLogic;
 
 internal class Program
 {
-
-    static string[] actions = new string[] { "[1] Add Note", "[2] Remove Note", "[3] View All Notes", "[4] Exit" };
+    static string[] actions = new string[] { "[1] Add Note", "[2] Remove Note", "[3] View All Notes", "[4] Update Note", "[5] Exit" };
 
     static void Main(string[] args)
     {
@@ -34,7 +33,6 @@ internal class Program
                         Console.WriteLine("No notes to delete.");
                         break;
                     }
-
                     ShowNotes();
                     Console.WriteLine("Which number of the note do you want to delete: ");
                     string input = Console.ReadLine();
@@ -53,6 +51,10 @@ internal class Program
                     break;
 
                 case 4:
+                    HandleUpdateNote();
+                    break;
+
+                case 5:
                     ExitInvalid(userInput);
                     Environment.Exit(0);
                     break;
@@ -61,7 +63,6 @@ internal class Program
                     ExitInvalid(userInput);
                     break;
             }
-
         }
     }
 
@@ -91,11 +92,26 @@ internal class Program
                 Console.WriteLine((i + 1) + ": " + notes[i]);
             }
         }
-
-
     }
 
+    static void HandleUpdateNote()
+    {
+        if (!NoteProcess.HasNotes())
+        {
+            Console.WriteLine("No notes to update.");
+            return;
+        }
 
+        ShowNotes();
+        Console.Write("Enter the number of the note you want to update: ");
+        string input = Console.ReadLine();
+
+        Console.Write("Enter the new content for the note: ");
+        string newContent = Console.ReadLine();
+
+        bool success = NoteProcess.UpdateNote(input, newContent);
+        Console.WriteLine(success ? "Note updated successfully." : "Invalid note number.");
+    }
 
     static int GetUserInput()
     {
@@ -127,9 +143,9 @@ internal class Program
         return Console.ReadLine();
     }
 
-    static void ExitInvalid(int? userAction)
+    static void ExitInvalid(int userAction)
     {
-        if (userAction == 4)
+        if (userAction == 5)
         {
             Console.WriteLine("CLOSING PROGRAM...");
         }
@@ -139,4 +155,3 @@ internal class Program
         }
     }
 }
-//trtrsfsdf

@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-
-namespace Note.BusinessDataLogic
+﻿namespace Note.BusinessDataLogic
 {
     public class NoteProcess
     {
         public static List<string> notes = new List<string>();
+
         public static bool UpdateNotes(Actions userAction, string input = null)
         {
             if (userAction == Actions.AddNote && !string.IsNullOrWhiteSpace(input))
@@ -28,11 +22,22 @@ namespace Note.BusinessDataLogic
             return false;
         }
 
+        public static bool UpdateNote(string indexStr, string newContent)
+        {
+            if (!int.TryParse(indexStr, out int index) || index < 1 || index > notes.Count)
+            {
+                return false; 
+            }
+
+            notes[index - 1] = newContent; 
+            return true;
+        }
 
         public static List<string> GetNotes()
         {
             return notes;
         }
+
         public static bool HasNotes()
         {
             return notes.Count > 0;
