@@ -2,7 +2,7 @@
 {
     public class NoteProcess
     {
-        public static List<string> notes = new List<string>();
+        private static List<string> notes = new List<string>();
 
         public static bool UpdateNotes(Actions userAction, string input = null)
         {
