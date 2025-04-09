@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using Note.BusinessDataLogic;
+using Note.Data;
+using Note.Business;
 
 internal class Program
 {
-    static string[] actions = new string[] { "[1] Add Note", "[2] Remove Note", "[3] View All Notes", "[4] Update Note", "[5] Exit" };
+    static string[] actions = new string[] {
+    "[1] Add Note", "[2] Remove Note", "[3] View All Notes",
+    "[4] Update Note", "[5] Exit", "[6] Switch Account" };
+
 
     static void Main(string[] args)
     {
@@ -16,9 +20,9 @@ internal class Program
             DisplayActions(name);
             int userInput = GetUserInput();
 
-            switch (userInput)
+            switch ((Actions)userInput)
             {
-                case 1:
+                case Actions.AddNote:
                     Console.Write("What's on your mind? \n \t");
                     string note = Console.ReadLine();
                     if (NoteProcess.UpdateNotes(Actions.AddNote, note))
@@ -27,7 +31,7 @@ internal class Program
                     }
                     break;
 
-                case 2:
+                case Actions.DeleteNote:
                     if (!NoteProcess.HasNotes())
                     {
                         Console.WriteLine("No notes to delete.");
@@ -46,17 +50,23 @@ internal class Program
                     }
                     break;
 
-                case 3:
+                case Actions.ViewNotes:
                     ShowNotes();
                     break;
 
-                case 4:
+                case Actions.UpdateNote:
                     HandleUpdateNote();
                     break;
 
-                case 5:
-                    ExitInvalid(userInput);
+                case Actions.Exit:
+                    ExitInvalid((int)Actions.Exit);
                     Environment.Exit(0);
+                    break;
+
+                case Actions.SwitchAccount:
+                    string newName = GetName();
+                    NoteProcess.RegisterOrLoadUser(newName);
+                    DisplayName(newName);
                     break;
 
                 default:
@@ -64,6 +74,7 @@ internal class Program
                     break;
             }
         }
+
     }
 
     static void DisplayActions(string name)
