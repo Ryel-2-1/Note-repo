@@ -14,7 +14,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="Note.BusinessDataLogic\Note.BusinessDataLogic.csproj" />
+    <ProjectReference Include="..\NoteCommon\NoteCommon.csproj" />
+    <ProjectReference Include="..\NoteDataService\NoteDataService.csproj" />
+    <ProjectReference Include="Note.BusinessDataLogic\NoteService.csproj" />
   </ItemGroup>
 
 </Project>
