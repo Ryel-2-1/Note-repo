@@ -20,8 +20,8 @@ internal class Program
 
         while (true)
         {
-            DisplayActions(currentUser.Name); // Display actions for current user
-            int userInput = GetUserInput(); // Get user input
+            DisplayActions(currentUser.Name); 
+            int userInput = GetUserInput(); 
 
             switch ((Actions)userInput)
             {
