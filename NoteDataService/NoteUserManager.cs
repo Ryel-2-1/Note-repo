@@ -6,7 +6,7 @@ namespace NoteDataService
 {
     public class NoteUserManager
     {
-        private List<UserRecord> users = new List<UserRecord>(); // Using UserRecord
+        private List<UserRecord> users = new List<UserRecord>(); 
         private UserRecord currentUser;
 
         public NoteUserManager()
@@ -24,7 +24,7 @@ namespace NoteDataService
 
         public UserRecord RegisterOrLoadUser(string name)
         {
-            // Check if a user with this name exists
+           
             foreach (var user in users)
             {
                 if (user.Name == name)
@@ -34,7 +34,7 @@ namespace NoteDataService
                 }
             }
 
-            // If not, create a new user
+            
             UserRecord newRecord = new UserRecord { Name = name };
             users.Add(newRecord);
             currentUser = newRecord;
