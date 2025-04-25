@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NoteDataService
+namespace NoteDataService 
 {
     public class NoteUserManager
     {
