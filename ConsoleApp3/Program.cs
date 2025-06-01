@@ -10,6 +10,8 @@ namespace NoteApp
         static string userName = string.Empty;
         static NoteUserManager noteUserManager = new NoteUserManager();
         static NoteBussinessSer noteService;
+        static DBDataService dataService = new DBDataService(); 
+
 
         static string[] actions = new string[]
         {
@@ -33,8 +35,12 @@ namespace NoteApp
                         Console.Write("What's on your mind? \n \t");
                         string note = Console.ReadLine();
                         if (noteService.UpdateNotes(Actions.AddNote, note))
+                        {
                             Console.WriteLine("Got it!");
+                            dataService.UpdateUser(noteService.GetUser()); // <- Save changes to DB
+                        }
                         break;
+
 
                     case Actions.DeleteNote:
                         if (!noteService.HasNotes())
@@ -46,10 +52,14 @@ namespace NoteApp
                         Console.WriteLine("Which number of the note do you want to delete: ");
                         string input = Console.ReadLine();
                         if (noteService.UpdateNotes(Actions.DeleteNote, input))
+                        {
                             Console.WriteLine("Note deleted successfully.");
+                            dataService.UpdateUser(noteService.GetUser()); // <- Save changes to DB
+                        }
                         else
                             Console.WriteLine("Invalid note number.");
                         break;
+
 
                     case Actions.ViewNotes:
                         ShowNotes();
@@ -139,7 +149,16 @@ namespace NoteApp
             string newContent = Console.ReadLine();
 
             bool success = noteService.UpdateNote(input, newContent);
-            Console.WriteLine(success ? "Note updated successfully." : "Invalid note number.");
+            if (success)
+            {
+                Console.WriteLine("Note updated successfully.");
+                dataService.UpdateUser(noteService.GetUser()); // <- Save to DB
+            }
+            else
+            {
+                Console.WriteLine("Invalid note number.");
+            }
+
         }
 
         static void ExitInvalid(int userAction)

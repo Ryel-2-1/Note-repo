@@ -8,6 +8,11 @@ namespace NoteService
     {
         private UserRecord currentUser;
 
+        public UserRecord GetUser()
+        {
+            return this.currentUser;
+        }
+
         public NoteBussinessSer(UserRecord currentUser)
         {
             this.currentUser = currentUser;
