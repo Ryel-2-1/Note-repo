@@ -1,7 +1,10 @@
-﻿using NoteCommon;
-using Microsoft.Data.SqlClient;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.IdentityModel.Tokens;
+using NoteCommon;
 using System;
 using System.Collections.Generic;
+using System.Xml.Linq;
+using static Azure.Core.HttpHeader;
 
 namespace NoteDataService
 {
@@ -10,121 +13,104 @@ namespace NoteDataService
         static string connectionString =
             "Data Source=RJ\\SQLEXPRESS01; Initial Catalog=NoteTakingApp; Integrated Security=True; TrustServerCertificate=True;";
         static SqlConnection sqlConnection;
-
+        List<UserRecord> userRecords = new List<UserRecord>();
         public DBDataService()
         {
             sqlConnection = new SqlConnection(connectionString);
+            GetDataFromDB();
         }
-
-        public void CreateUser(UserRecord user)
+        public void GetDataFromDB()
         {
-            string insertQuery = "INSERT INTO NoteTable (UserRecord, Notes) VALUES (@UserRecord, @Notes)";
-            SqlCommand command = new SqlCommand(insertQuery, sqlConnection);
-
-            command.Parameters.Add("@UserRecord", System.Data.SqlDbType.NVarChar, 100).Value = user.Name;
-
-            // Convert notes list to a single string; consider using a safe delimiter
-            string notesText = (user.Notes != null) ? string.Join("||", user.Notes) : "";
-            command.Parameters.Add("@Notes", System.Data.SqlDbType.NVarChar, -1).Value = notesText;
-
-            try
+            userRecords.Clear();
+            sqlConnection.Open();
+            string selectQuery = "SELECT * FROM NoteTable";
+            SqlCommand command = new SqlCommand(selectQuery, sqlConnection);
+            SqlDataReader reader = command.ExecuteReader();
+            while (reader.Read())
             {
-                sqlConnection.Open();
-                Console.WriteLine($"Executing query to insert UserRecord='{user.Name}', Notes='{notesText}'");
-                command.ExecuteNonQuery();
+                string Name = reader["Name"].ToString();
+                string Notes = reader["Notes"].ToString();
+                if (!string.IsNullOrEmpty(Notes))
+                {
+                    userRecords.Add(new UserRecord
+                    {
+                        Name = Name,
+                        Notes = Notes.Split('|').ToList()
+                    });
+                }
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error creating user: " + ex.Message);
-            }
-            finally
-            {
-                sqlConnection.Close();
-            }
+            reader.Close();
+            sqlConnection.Close();
         }
-
         public List<UserRecord> GetUsers()
         {
-            string selectQuery = "SELECT UserRecord, Notes FROM NoteTable";
-            SqlCommand command = new SqlCommand(selectQuery, sqlConnection);
-
-            var users = new List<UserRecord>();
-
-            try
+            return userRecords;
+        }
+        public void CreateUser(UserRecord user)
+        {
+            userRecords.Add(user);
+            sqlConnection.Open();
+            string insertQuery = "INSERT INTO NoteTable (Name, Notes) VALUES (@Name, @Notes)";
+            SqlCommand command = new SqlCommand(insertQuery, sqlConnection);
+            command.Parameters.AddWithValue("@Name", user.Name);
+            command.Parameters.AddWithValue("@Notes", string.Join("|", user.Notes));
+            command.ExecuteNonQuery();
+            sqlConnection.Close();
+        }
+        public bool AddNote(UserRecord user)
+        {
+            foreach (var existingUser in userRecords)
             {
-                sqlConnection.Open();
-                SqlDataReader reader = command.ExecuteReader();
-
-                while (reader.Read())
+                if (existingUser.Name == user.Name)
                 {
-                    string name = reader["UserRecord"].ToString();
-                    string notesText = reader["Notes"].ToString();
-
-                    List<string> notes = string.IsNullOrEmpty(notesText)
-                        ? new List<string>()
-                        : new List<string>(notesText.Split(new string[] { "||" }, StringSplitOptions.None));
-
-                    users.Add(new UserRecord { Name = name, Notes = notes });
+                    existingUser.Notes.Add(user.Notes.Last());
+                    UpdateUserInDB(existingUser);
+                    return true;
                 }
-
-                reader.Close();
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error reading users: " + ex.Message);
-            }
-            finally
-            {
-                sqlConnection.Close();
-            }
-
-            return users;
+            return false;
         }
-
-        public void RemoveUser(UserRecord user)
+        private void UpdateUserInDB(UserRecord user)
         {
-            string deleteQuery = "DELETE FROM NoteTable WHERE UserRecord = @UserRecord";
-            SqlCommand command = new SqlCommand(deleteQuery, sqlConnection);
-            command.Parameters.AddWithValue("@UserRecord", user.Name);
-
-            try
-            {
-                sqlConnection.Open();
-                command.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error removing user: " + ex.Message);
-            }
-            finally
-            {
-                sqlConnection.Close();
-            }
-        }
-
-        public void UpdateUser(UserRecord user)
-        {
-            string updateQuery = "UPDATE NoteTable SET Notes = @Notes WHERE UserRecord = @UserRecord";
+            sqlConnection.Open();
+            string updateQuery = "UPDATE NoteTable SET Notes = @Notes WHERE Name = @Name";
             SqlCommand command = new SqlCommand(updateQuery, sqlConnection);
-
-            command.Parameters.AddWithValue("@UserRecord", user.Name);
-            string notesText = (user.Notes != null) ? string.Join("||", user.Notes) : "";
-            command.Parameters.AddWithValue("@Notes", notesText);
-
-            try
+            command.Parameters.AddWithValue("@Name", user.Name);
+            command.Parameters.AddWithValue("@Notes", string.Join("|", user.Notes));
+            command.ExecuteNonQuery();
+            sqlConnection.Close();
+        }
+        public bool UpdateNotes(string user, int index, string note)
+        {
+            foreach (var existingUser in userRecords)
             {
-                sqlConnection.Open();
-                command.ExecuteNonQuery();
+                if (index >= 0 && index < existingUser.Notes.Count)
+                {
+                    existingUser.Notes[index] = note;
+                    UpdateUserInDB(existingUser);
+                    return true;
+                }
             }
-            catch (Exception ex)
+            return false;
+        }
+        public bool DeleteNote(UserRecord user, string index)
+        {
+            foreach (var existingUser in userRecords)
             {
-                Console.WriteLine("Error updating user: " + ex.Message);
+                if (existingUser.Name == user.Name)
+                {
+                    int ind = Convert.ToInt32(index);
+                    ind--;
+                    if (ind >= 0 && ind < existingUser.Notes.Count)
+                    {
+                        existingUser.Notes.RemoveAt(ind);
+                        UpdateUserInDB(existingUser);
+                        return true;
+                    }
+                    break;
+                }
             }
-            finally
-            {
-                sqlConnection.Close();
-            }
+            return false;
         }
     }
 }
-

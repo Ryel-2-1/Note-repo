@@ -9,7 +9,7 @@ namespace NoteDataService
 {
     public class InMemoryNoteDataService : INoteDataService
     {
-         List<UserRecord> users = new List<UserRecord>();
+        List<UserRecord> users = new List<UserRecord>();
 
         public InMemoryNoteDataService()
         {
@@ -31,19 +31,47 @@ namespace NoteDataService
         {
             return users;
         }
-
-        public void RemoveUser(UserRecord user)
+        public bool AddNote(UserRecord user)
         {
-            users.RemoveAll(u => u.Name == user.Name);
+            foreach (var existingUser in users)
+            {
+                if (existingUser.Name == user.Name)
+                {
+                    existingUser.Notes.AddRange(user.Notes);
+                    return true;
+                }
+            }
+            return false;
         }
 
-        public void UpdateUser(UserRecord user)
+        public bool UpdateNotes(string user, int index, string note)
         {
-            var index = users.FindIndex(u => u.Name == user.Name);
-            if (index != -1)
+            foreach (var existingUser in users)
             {
-                users[index] = user;
+                if (existingUser.Name == user && index >= 0 && index < existingUser.Notes.Count)
+                {
+                    existingUser.Notes[index] = note;
+                    return true;
+                }
             }
+            return false;
+        }
+
+        public bool DeleteNote(UserRecord user, string index)
+        {
+            foreach (var existingUser in users)
+            {
+                if (existingUser.Name == user.Name)
+                {
+                    int ind = Convert.ToInt32(index);
+                    if (ind >= 0 && ind < existingUser.Notes.Count)
+                    {
+                        existingUser.Notes.RemoveAt(ind);
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
     }
 }

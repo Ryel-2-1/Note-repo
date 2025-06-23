@@ -9,13 +9,13 @@ namespace NoteDataService
 {
     public class NoteDataService
     {
-         INoteDataService dataService;
+        INoteDataService dataService;
 
         public NoteDataService()
         {
             //dataService = new InMemoryNoteDataService(); 
-            // dataService = new TextFileNoteDataService();
-            // dataService = new JsonFileNoteDataService();
+            //dataService = new TextFileNoteDataService();
+            //dataService = new JsonFileNoteDataService();
             dataService = new DBDataService();
         }
 
@@ -23,17 +23,21 @@ namespace NoteDataService
         {
             return dataService.GetUsers();
         }
+        public bool AddNote(UserRecord user)
+        {
+            return dataService.AddNote(user);
+        }
         public void AddUser(UserRecord user)
         {
             dataService.CreateUser(user);
         }
-        public void UpdateUser(UserRecord user)
+        public bool UpdateNote(string user, int index, string note)
         {
-            dataService.UpdateUser(user);
+            return dataService.UpdateNotes(user, index, note);
         }
-        public void RemoveUser(UserRecord user)
+        public bool DeleteNote(UserRecord user, string index)
         {
-            dataService.RemoveUser(user);
+            return dataService.DeleteNote(user, index);
         }
     }
 }

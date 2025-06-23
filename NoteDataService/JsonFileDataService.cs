@@ -10,8 +10,8 @@ namespace NoteDataService
 {
     public class JsonFileNoteDataService : INoteDataService
     {
-         static List<UserRecord> userRecords = new List<UserRecord>();
-         static string jsonFilePath = "users.json";
+        static List<UserRecord> users = new List<UserRecord>();
+        static string jsonFilePath = "users.json";
 
         public JsonFileNoteDataService()
         {
@@ -20,64 +20,97 @@ namespace NoteDataService
 
         private void LoadFromFile()
         {
-            if (!File.Exists(jsonFilePath))
-                return;
-
             string jsonText = File.ReadAllText(jsonFilePath);
 
-            userRecords = JsonSerializer.Deserialize<List<UserRecord>>(jsonText,
+            users = JsonSerializer.Deserialize<List<UserRecord>>(jsonText,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
-            if (userRecords == null)
-                userRecords = new List<UserRecord>();
         }
+        //private void LoadFromFile()
+        //{
+        //    if (!File.Exists(jsonFilePath))
+        //        return;
+
+        //    string jsonText = File.ReadAllText(jsonFilePath);
+        //    if (string.IsNullOrWhiteSpace(jsonText))
+        //    {
+        //        users = new List<UserRecord>(); // Initialize with an empty list
+        //        return;
+        //    }
+
+        //    try
+        //    {
+        //        users = JsonSerializer.Deserialize<List<UserRecord>>(jsonText,
+        //            new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new List<UserRecord>();
+        //    }
+        //    catch (JsonException ex)
+        //    {
+        //        Console.WriteLine("Error deserializing JSON: " + ex.Message);
+        //        users = new List<UserRecord>(); // Initialize with an empty list on error
+        //    }
+        //}
 
         private void WriteToFile()
         {
-            string jsonString = JsonSerializer.Serialize(userRecords, new JsonSerializerOptions { WriteIndented = true });
+            string jsonString = JsonSerializer.Serialize(users, new JsonSerializerOptions { WriteIndented = true });
             File.WriteAllText(jsonFilePath, jsonString);
-        }
-
-        private int FindUserIndex(string name)
-        {
-            for (int i = 0; i < userRecords.Count; i++)
-            {
-                if (userRecords[i].Name.Trim().ToLower() == name.Trim().ToLower())
-                    return i;
-            }
-            return -1;
         }
 
         public void CreateUser(UserRecord user)
         {
-            userRecords.Add(user);
+            users.Add(user);
             WriteToFile();
         }
 
         public List<UserRecord> GetUsers()
         {
-            return userRecords;
+            return users;
+        }
+        public bool AddNote(UserRecord user)
+        {
+            foreach (var userRecord in users)
+            {
+                if (userRecord.Name == user.Name)
+                {
+                    userRecord.Notes.AddRange(user.Notes);
+                    WriteToFile();
+                    return true;
+                }
+            }
+            return false;
         }
 
-        public void RemoveUser(UserRecord user)
+        public bool UpdateNotes(string user, int index, string note)
         {
-            int index = FindUserIndex(user.Name);
-            if (index != -1)
+            foreach (var userRecord in users)
             {
-                userRecords.RemoveAt(index);
-                WriteToFile();
+                if (userRecord.Name == user)
+                {
+                    if (index < 0 || index >= userRecord.Notes.Count)
+                        return false;
+                    userRecord.Notes[index] = note;
+                    WriteToFile();
+                    return true;
+                }
             }
+            return false;
         }
 
-        public void UpdateUser(UserRecord user)
+        public bool DeleteNote(UserRecord user, string index)
         {
-            int index = FindUserIndex(user.Name);
-            if (index != -1)
+            foreach (var existingUser in users)
             {
-                userRecords[index].Name = user.Name;
-                userRecords[index].Notes = user.Notes;
-                WriteToFile();
+                if (existingUser.Name == user.Name)
+                {
+                    int ind = Convert.ToInt32(index);
+                    if (ind >= 0 && ind < existingUser.Notes.Count)
+                    {
+                        existingUser.Notes.RemoveAt(ind);
+                        return true;
+                    }
+                }
             }
+            return false;
         }
     }
 }

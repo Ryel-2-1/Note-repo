@@ -9,11 +9,11 @@ namespace NoteDataService
 {
     public interface INoteDataService
     {
-        void CreateUser(UserRecord user);
         List<UserRecord> GetUsers();
-        void RemoveUser(UserRecord user);
-        void UpdateUser(UserRecord user);
-        
+        void CreateUser(UserRecord user);
+        bool AddNote(UserRecord user);
+        bool UpdateNotes(string user, int index, string note);
+        bool DeleteNote(UserRecord user, string index);
     }
 
 }

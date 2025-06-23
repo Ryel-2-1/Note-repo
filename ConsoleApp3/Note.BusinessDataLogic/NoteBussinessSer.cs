@@ -1,63 +1,91 @@
 ﻿using Note.Data;
 using NoteCommon;
 using System.Collections.Generic;
-
+using NoteDataService;
 namespace NoteService
 {
     public class NoteBussinessSer
     {
-        private UserRecord currentUser;
+        string currentUser = null;
+        NoteDataService.NoteDataService dataService = new NoteDataService.NoteDataService();
 
-        public UserRecord GetUser()
+        public List<UserRecord> GetUserRecords()
         {
-            return this.currentUser;
+            return dataService.GetAllUsers();
         }
-
-        public NoteBussinessSer(UserRecord currentUser)
+        public List<string> GetCurrentUserNote(string user)
         {
-            this.currentUser = currentUser;
+            foreach (var users in GetUserRecords())
+            {
+                if (users.Name == user)
+                {
+                    return users.Notes;
+                }
+            }
+            return null;
         }
-
-        public bool UpdateNotes(Actions userAction, string input = null)
+        public bool UpdateNotes(Actions userAction, string user, string input)
         {
+            currentUser = user;
             if (currentUser == null)
                 return false;
 
-            if (userAction == Actions.AddNote && !string.IsNullOrWhiteSpace(input))
+            if (userAction == Actions.AddNote)
             {
-                currentUser.Notes.Add(input);
-                return true;
+                var userData = new UserRecord
+                {
+                    Name = currentUser
+                };
+                userData.Notes.Add(input);
+                return dataService.AddNote(userData);
             }
 
-            if (userAction == Actions.DeleteNote && currentUser.Notes.Count > 0 &&
-                int.TryParse(input, out int index) && index >= 1 && index <= currentUser.Notes.Count)
+            if (userAction == Actions.DeleteNote)
             {
-                currentUser.Notes.RemoveAt(index - 1);
-                return true;
-            }
+                var userData = new UserRecord
+                {
+                    Name = currentUser
+                };
 
+                return dataService.DeleteNote(userData, input);
+            }
             return false;
         }
 
-        public bool UpdateNote(string indexStr, string newContent)
+        public bool UpdateNotes(string user, int index, string input)
         {
-            if (!int.TryParse(indexStr, out int index) || index < 1 || index > currentUser.Notes.Count)
+            index--;
+            return dataService.UpdateNote(user, index, input);
+
+        }
+        public void RegisterOrLoadUser(string user)
+        {
+
+            bool userExist = false;
+            foreach (var users in GetUserRecords())
             {
-                return false;
+                if (users.Name == user)
+                {
+                    currentUser = user;
+                    userExist = true;
+                }
+
             }
+            if (!userExist)
+            {
+                currentUser = user;
+                var userData = new UserRecord
+                {
+                    Name = currentUser
+                };
+                dataService.AddUser(userData);
 
-            currentUser.Notes[index - 1] = newContent;
-            return true;
+            }
         }
-
-        public List<string> GetNotes()
+        public bool HasNotes(string user)
         {
-            return currentUser?.Notes ?? new List<string>();
-        }
-
-        public bool HasNotes()
-        {
-            return currentUser != null && currentUser.Notes.Count > 0;
+            var userNotes = GetCurrentUserNote(user);
+            return userNotes != null && userNotes.Count > 0;
         }
     }
 }

@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\NoteCommon\NoteCommon.csproj" />
+    <ProjectReference Include="..\..\NoteDataService\NoteDataService.csproj" />
   </ItemGroup>
 
 </Project>

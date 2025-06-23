@@ -9,7 +9,7 @@ namespace NoteDataService
     public class TextFileNoteDataService : INoteDataService
     {
         private string filePath = "users.txt";
-        private List<UserRecord> userRecords = new List<UserRecord>();
+        private List<UserRecord> users = new List<UserRecord>();
 
         public TextFileNoteDataService()
         {
@@ -32,17 +32,14 @@ namespace NoteDataService
 
                     List<string> notes = new List<string>();
 
-                    if (parts.Length > 1 && parts[1].Length > 0)
+                    for (int i = 1; i < parts.Length; i++)
                     {
-                        string[] noteParts = parts[1].Split(',');
-
-                        foreach (string note in noteParts)
+                        if (!string.IsNullOrWhiteSpace(parts[i]))
                         {
-                            notes.Add(note.Trim());
+                            notes.Add(parts[i].Trim());
                         }
                     }
-
-                    userRecords.Add(new UserRecord { Name = name, Notes = notes });
+                    users.Add(new UserRecord { Name = name, Notes = notes });
                 }
             }
         }
@@ -50,37 +47,76 @@ namespace NoteDataService
 
         private void WriteToFile()
         {
-            var lines = userRecords.Select(u =>
-                $"{u.Name}|{string.Join(",", u.Notes)}").ToArray();
+            var lines = new string[users.Count];
+
+            for (int i = 0; i < users.Count; i++)
+            {
+                lines[i] = users[i].Name + "|" + string.Join("|", users[i].Notes);
+
+            }
 
             File.WriteAllLines(filePath, lines);
         }
 
         public void CreateUser(UserRecord user)
         {
-            userRecords.Add(user);
+            users.Add(user);
             WriteToFile();
         }
 
         public List<UserRecord> GetUsers()
         {
-            return userRecords;
+            return users;
         }
 
-        public void RemoveUser(UserRecord user)
-        {
-            userRecords.RemoveAll(u => u.Name == user.Name);
-            WriteToFile();
-        }
 
-        public void UpdateUser(UserRecord user)
+
+
+        public bool AddNote(UserRecord user)
         {
-            int index = userRecords.FindIndex(u => u.Name == user.Name);
-            if (index != -1)
+            foreach (var existingUser in users)
             {
-                userRecords[index] = user;
-                WriteToFile();
+                if (existingUser.Name == user.Name)
+                {
+                    existingUser.Notes.AddRange(user.Notes);
+                    WriteToFile();
+                    return true;
+                }
             }
+            return false;
+        }
+
+        public bool UpdateNotes(string user, int index, string note)
+        {
+            foreach (var existingUser in users)
+            {
+                if (existingUser.Name == user && index >= 0 && index < existingUser.Notes.Count)
+                {
+                    existingUser.Notes[index] = note;
+                    WriteToFile();
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool DeleteNote(UserRecord user, string index)
+        {
+            foreach (var existingUser in users)
+            {
+                if (existingUser.Name == user.Name)
+                {
+                    int noteIndex = Convert.ToInt32(index);
+                    noteIndex--;
+                    if (noteIndex >= 0 && noteIndex < existingUser.Notes.Count)
+                    {
+                        existingUser.Notes.RemoveAt(noteIndex);
+                        WriteToFile();
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
     }
 }

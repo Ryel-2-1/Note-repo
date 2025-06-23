@@ -7,12 +7,8 @@ namespace NoteApp
 {
     internal class Program
     {
-        static string userName = string.Empty;
-        static NoteUserManager noteUserManager = new NoteUserManager();
-        static NoteBussinessSer noteService;
-        static DBDataService dataService = new DBDataService(); 
-
-
+        static NoteBussinessSer noteService = new NoteBussinessSer();
+        static string userName;
         static string[] actions = new string[]
         {
             "[1] Add Note", "[2] Remove Note", "[3] View All Notes",
@@ -23,7 +19,7 @@ namespace NoteApp
         {
             Console.WriteLine("Hello, this is a note-taking program.");
 
-            Login(); 
+            Login();
 
             int userInput = GetUserInput();
 
@@ -34,27 +30,21 @@ namespace NoteApp
                     case Actions.AddNote:
                         Console.Write("What's on your mind? \n \t");
                         string note = Console.ReadLine();
-                        if (noteService.UpdateNotes(Actions.AddNote, note))
+                        if (noteService.UpdateNotes(Actions.AddNote, userName, note))
                         {
                             Console.WriteLine("Got it!");
-                            dataService.UpdateUser(noteService.GetUser()); // <- Save changes to DB
                         }
                         break;
 
 
                     case Actions.DeleteNote:
-                        if (!noteService.HasNotes())
-                        {
-                            Console.WriteLine("No notes to delete.");
-                            break;
-                        }
+
                         ShowNotes();
                         Console.WriteLine("Which number of the note do you want to delete: ");
                         string input = Console.ReadLine();
-                        if (noteService.UpdateNotes(Actions.DeleteNote, input))
+                        if (noteService.UpdateNotes(Actions.DeleteNote, userName, input))
                         {
                             Console.WriteLine("Note deleted successfully.");
-                            dataService.UpdateUser(noteService.GetUser()); // <- Save changes to DB
                         }
                         else
                             Console.WriteLine("Invalid note number.");
@@ -84,15 +74,11 @@ namespace NoteApp
 
             Console.WriteLine("CLOSING PROGRAM...");
         }
-
         static void Login()
         {
             Console.WriteLine("What is your name?");
             userName = Console.ReadLine();
-
-            UserRecord user = noteUserManager.RegisterOrLoadUser(userName);
-            noteService = new NoteBussinessSer(user);
-
+            noteService.RegisterOrLoadUser(userName);
             Console.WriteLine("Good day! " + userName);
             DisplayActions();
         }
@@ -121,38 +107,34 @@ namespace NoteApp
 
         static void ShowNotes()
         {
-            if (!noteService.HasNotes())
+
+            if (noteService.HasNotes(userName))
             {
-                Console.WriteLine("No notes");
+                int i = 1;
+                foreach (var note in noteService.GetCurrentUserNote(userName))
+                {
+                    Console.WriteLine(i + ". " + note);
+                    i++;
+                }
             }
             else
             {
-                List<string> notes = noteService.GetNotes();
-                Console.WriteLine("Your notes:");
-                for (int i = 0; i < notes.Count; i++)
-                    Console.WriteLine((i + 1) + ": " + notes[i]);
+                Console.WriteLine("You have no notes yet.");
+
             }
         }
-
         static void HandleUpdateNote()
         {
-            if (!noteService.HasNotes())
-            {
-                Console.WriteLine("No notes to update.");
-                return;
-            }
-
             ShowNotes();
             Console.Write("Enter the number of the note you want to update: ");
-            string input = Console.ReadLine();
+            int input = Convert.ToInt16(Console.ReadLine());
             Console.Write("Enter the new content for the note: ");
             string newContent = Console.ReadLine();
 
-            bool success = noteService.UpdateNote(input, newContent);
+            bool success = noteService.UpdateNotes(userName, input, newContent);
             if (success)
             {
                 Console.WriteLine("Note updated successfully.");
-                dataService.UpdateUser(noteService.GetUser()); // <- Save to DB
             }
             else
             {
