@@ -13,10 +13,10 @@ namespace NoteDataService
 
         public NoteDataService()
         {
-            //dataService = new InMemoryNoteDataService(); 
-            //dataService = new TextFileNoteDataService();
-            //dataService = new JsonFileNoteDataService();
-            dataService = new DBDataService();
+           // dataService = new InMemoryNoteDataService(); 
+          //  dataService = new TextFileNoteDataService();
+            dataService = new JsonFileNoteDataService();
+           // dataService = new DBDataService();
         }
 
         public List<UserRecord> GetAllUsers()

@@ -18,8 +18,10 @@ namespace NoteDataService
 
         private void CreateDummyUsers()
         {
-            users.Add(new UserRecord { Name = "Alice", Notes = new List<string> { "buy groceries", "play games" } });
-            users.Add(new UserRecord { Name = "Bob", Notes = new List<string> { "wash the dishes", "pending backlogs" } });
+            users.Add(new UserRecord { Name = "Jhomar", Notes = new List<string> { "buy groceries", "play games" } });
+            users.Add(new UserRecord { Name = "abdul", Notes = new List<string> { "wash the dishes", "pending backlogs" } });
+            users.Add(new UserRecord { Name = "Ryel", Notes = new List<string> { "scrims", "homework" } });
+            users.Add(new UserRecord { Name = "nyerk", Notes = new List<string> { "aga", "merk" } });
         }
 
         public void CreateUser(UserRecord user)
@@ -35,7 +37,7 @@ namespace NoteDataService
         {
             foreach (var existingUser in users)
             {
-                if (existingUser.Name == user.Name)
+                if (string.Equals(existingUser.Name, user.Name, StringComparison.OrdinalIgnoreCase))
                 {
                     existingUser.Notes.AddRange(user.Notes);
                     return true;
@@ -48,7 +50,7 @@ namespace NoteDataService
         {
             foreach (var existingUser in users)
             {
-                if (existingUser.Name == user && index >= 0 && index < existingUser.Notes.Count)
+                if (string.Equals(existingUser.Name, user, StringComparison.OrdinalIgnoreCase) && index >= 0 && index < existingUser.Notes.Count)
                 {
                     existingUser.Notes[index] = note;
                     return true;
@@ -61,7 +63,8 @@ namespace NoteDataService
         {
             foreach (var existingUser in users)
             {
-                if (existingUser.Name == user.Name)
+                if (string.Equals(existingUser.Name, user.Name, StringComparison.OrdinalIgnoreCase))
+
                 {
                     int ind = Convert.ToInt32(index);
                     if (ind >= 0 && ind < existingUser.Notes.Count)

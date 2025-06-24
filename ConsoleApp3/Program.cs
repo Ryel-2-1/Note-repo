@@ -20,6 +20,7 @@ namespace NoteApp
             Console.WriteLine("Hello, this is a note-taking program.");
 
             Login();
+            DisplayActions();
 
             int userInput = GetUserInput();
 
@@ -62,7 +63,7 @@ namespace NoteApp
                     case Actions.SwitchAccount:
                         Login();
                         break;
-
+                        
                     default:
                         ExitInvalid(userInput);
                         break;
@@ -80,7 +81,7 @@ namespace NoteApp
             userName = Console.ReadLine();
             noteService.RegisterOrLoadUser(userName);
             Console.WriteLine("Good day! " + userName);
-            DisplayActions();
+            
         }
 
         static void DisplayActions()

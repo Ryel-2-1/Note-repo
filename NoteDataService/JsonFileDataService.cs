@@ -26,29 +26,7 @@ namespace NoteDataService
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
         }
-        //private void LoadFromFile()
-        //{
-        //    if (!File.Exists(jsonFilePath))
-        //        return;
-
-        //    string jsonText = File.ReadAllText(jsonFilePath);
-        //    if (string.IsNullOrWhiteSpace(jsonText))
-        //    {
-        //        users = new List<UserRecord>(); // Initialize with an empty list
-        //        return;
-        //    }
-
-        //    try
-        //    {
-        //        users = JsonSerializer.Deserialize<List<UserRecord>>(jsonText,
-        //            new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new List<UserRecord>();
-        //    }
-        //    catch (JsonException ex)
-        //    {
-        //        Console.WriteLine("Error deserializing JSON: " + ex.Message);
-        //        users = new List<UserRecord>(); // Initialize with an empty list on error
-        //    }
-        //}
+       
 
         private void WriteToFile()
         {
