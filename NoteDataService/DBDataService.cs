@@ -30,15 +30,21 @@ namespace NoteDataService
             {
                 string Name = reader["Name"].ToString();
                 string Notes = reader["Notes"].ToString();
+
+                List<string> notesList = new List<string>();
+
                 if (!string.IsNullOrEmpty(Notes))
                 {
-                    userRecords.Add(new UserRecord
-                    {
-                        Name = Name,
-                        Notes = Notes.Split('|').ToList()
-                    });
+                    notesList = Notes.Split('|').ToList();
                 }
+
+                userRecords.Add(new UserRecord
+                {
+                    Name = Name,
+                    Notes = notesList
+                });
             }
+
             reader.Close();
             sqlConnection.Close();
         }
