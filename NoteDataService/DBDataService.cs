@@ -90,11 +90,15 @@ namespace NoteDataService
         {
             foreach (var existingUser in userRecords)
             {
-                if (index >= 0 && index < existingUser.Notes.Count)
+                if (existingUser.Name == user) 
                 {
-                    existingUser.Notes[index] = note;
-                    UpdateUserInDB(existingUser);
-                    return true;
+                    if (index >= 0 && index < existingUser.Notes.Count)
+                    {
+                        existingUser.Notes[index] = note;
+                        UpdateUserInDB(existingUser);
+                        return true;
+                    }
+                    break; 
                 }
             }
             return false;

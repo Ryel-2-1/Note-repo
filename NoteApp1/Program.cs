@@ -11,7 +11,26 @@ namespace NoteApp1
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            Application.Run(new Form1());
+            Application.SetCompatibleTextRenderingDefault(false);
+
+            using (LoginNew loginForm = new LoginNew())
+            {
+                var result = loginForm.ShowDialog();
+
+                if (result == DialogResult.OK)
+                {
+                    string username = loginForm.EnteredUsername;
+
+                    
+                    Application.Run(new Form1(username));
+                }
+                else
+                {
+                    // Exit if login was cancelled
+                    Application.Exit();
+                }
+
+            }
         }
     }
 }
