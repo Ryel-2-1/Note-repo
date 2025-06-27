@@ -26,7 +26,6 @@ namespace NoteApp1
                 }
                 else
                 {
-                    // Exit if login was cancelled
                     Application.Exit();
                 }
 

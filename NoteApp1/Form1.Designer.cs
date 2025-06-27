@@ -40,7 +40,6 @@
             btnViewAll = new Button();
             btnExit = new Button();
             label3 = new Label();
-            label4 = new Label();
             lblStatus = new Label();
             flowLayoutPanel1.SuspendLayout();
             flowLayoutPanel2.SuspendLayout();
@@ -50,8 +49,8 @@
             // 
             lblLoggedInUser.AutoSize = true;
             lblLoggedInUser.FlatStyle = FlatStyle.Popup;
-            lblLoggedInUser.Font = new Font("Yu Gothic UI", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblLoggedInUser.Location = new Point(34, 38);
+            lblLoggedInUser.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblLoggedInUser.Location = new Point(44, 56);
             lblLoggedInUser.Name = "lblLoggedInUser";
             lblLoggedInUser.Size = new Size(237, 32);
             lblLoggedInUser.TabIndex = 0;
@@ -59,23 +58,24 @@
             // 
             // btnSwitchUser
             // 
-            btnSwitchUser.Font = new Font("Yu Gothic UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnSwitchUser.Location = new Point(437, 56);
+            btnSwitchUser.BackColor = Color.WhiteSmoke;
+            btnSwitchUser.Font = new Font("Segoe UI", 11.25F);
+            btnSwitchUser.Location = new Point(457, 56);
             btnSwitchUser.Name = "btnSwitchUser";
             btnSwitchUser.Size = new Size(113, 32);
             btnSwitchUser.TabIndex = 1;
             btnSwitchUser.Text = "Switch Account";
-            btnSwitchUser.UseVisualStyleBackColor = true;
+            btnSwitchUser.UseVisualStyleBackColor = false;
             btnSwitchUser.Click += button1_Click;
             // 
             // flowLayoutPanel1
             // 
             flowLayoutPanel1.Controls.Add(lstNotes);
-            flowLayoutPanel1.Controls.Add(label4);
             flowLayoutPanel1.Controls.Add(lblStatus);
             flowLayoutPanel1.Location = new Point(34, 112);
+            flowLayoutPanel1.Margin = new Padding(10);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(324, 274);
+            flowLayoutPanel1.Size = new Size(324, 281);
             flowLayoutPanel1.TabIndex = 2;
             flowLayoutPanel1.Paint += flowLayoutPanel1_Paint;
             // 
@@ -93,13 +93,12 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Font = new Font("Yu Gothic UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label2.Font = new Font("Segoe Print", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             label2.Location = new Point(47, 104);
             label2.Name = "label2";
-            label2.Size = new Size(81, 20);
+            label2.Size = new Size(94, 26);
             label2.TabIndex = 3;
             label2.Text = "Your Notes";
-            label2.Click += label2_Click;
             // 
             // flowLayoutPanel2
             // 
@@ -110,67 +109,72 @@
             flowLayoutPanel2.Controls.Add(btnExit);
             flowLayoutPanel2.Location = new Point(376, 112);
             flowLayoutPanel2.Name = "flowLayoutPanel2";
-            flowLayoutPanel2.Size = new Size(203, 274);
+            flowLayoutPanel2.Size = new Size(203, 281);
             flowLayoutPanel2.TabIndex = 3;
             // 
             // btnAddNote
             // 
-            btnAddNote.Font = new Font("Yu Gothic UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnAddNote.BackColor = Color.WhiteSmoke;
+            btnAddNote.Font = new Font("Segoe UI", 11.25F);
             btnAddNote.Location = new Point(12, 25);
             btnAddNote.Margin = new Padding(12, 25, 3, 3);
             btnAddNote.Name = "btnAddNote";
             btnAddNote.Size = new Size(182, 35);
             btnAddNote.TabIndex = 0;
-            btnAddNote.Text = "Add Note";
-            btnAddNote.UseVisualStyleBackColor = true;
+            btnAddNote.Text = "➕   Add Note";
+            btnAddNote.UseVisualStyleBackColor = false;
             btnAddNote.Click += btnAddNote_Click;
             // 
             // btnUpdateNote
             // 
-            btnUpdateNote.Font = new Font("Yu Gothic UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnUpdateNote.BackColor = Color.WhiteSmoke;
+            btnUpdateNote.Font = new Font("Segoe UI", 11.25F);
             btnUpdateNote.Location = new Point(12, 66);
             btnUpdateNote.Margin = new Padding(12, 3, 3, 3);
             btnUpdateNote.Name = "btnUpdateNote";
             btnUpdateNote.Size = new Size(182, 35);
             btnUpdateNote.TabIndex = 1;
-            btnUpdateNote.Text = "Update Note";
-            btnUpdateNote.UseVisualStyleBackColor = true;
+            btnUpdateNote.Text = "✏️:   Update Note";
+            btnUpdateNote.UseVisualStyleBackColor = false;
             btnUpdateNote.Click += btnUpdateNote_Click;
             // 
             // btnDeleteNote
             // 
-            btnDeleteNote.Font = new Font("Yu Gothic UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnDeleteNote.BackColor = Color.WhiteSmoke;
+            btnDeleteNote.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             btnDeleteNote.Location = new Point(12, 107);
             btnDeleteNote.Margin = new Padding(12, 3, 3, 3);
             btnDeleteNote.Name = "btnDeleteNote";
             btnDeleteNote.Size = new Size(182, 35);
             btnDeleteNote.TabIndex = 2;
-            btnDeleteNote.Text = "Delete Note";
-            btnDeleteNote.UseVisualStyleBackColor = true;
+            btnDeleteNote.Text = "🗑️:   Delete Note";
+            btnDeleteNote.UseVisualStyleBackColor = false;
             btnDeleteNote.Click += btnDeleteNote_Click;
             // 
             // btnViewAll
             // 
-            btnViewAll.Font = new Font("Yu Gothic UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnViewAll.BackColor = Color.WhiteSmoke;
+            btnViewAll.Font = new Font("Segoe UI", 11.25F);
             btnViewAll.Location = new Point(12, 148);
             btnViewAll.Margin = new Padding(12, 3, 3, 3);
             btnViewAll.Name = "btnViewAll";
             btnViewAll.Size = new Size(182, 35);
             btnViewAll.TabIndex = 3;
-            btnViewAll.Text = "View All Notes";
-            btnViewAll.UseVisualStyleBackColor = true;
+            btnViewAll.Text = "📋:   View All Notes";
+            btnViewAll.UseVisualStyleBackColor = false;
             btnViewAll.Click += btnViewAll_Click;
             // 
             // btnExit
             // 
-            btnExit.Font = new Font("Yu Gothic UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnExit.BackColor = Color.WhiteSmoke;
+            btnExit.Font = new Font("Segoe UI", 11.25F);
             btnExit.Location = new Point(12, 189);
             btnExit.Margin = new Padding(12, 3, 3, 3);
             btnExit.Name = "btnExit";
             btnExit.Size = new Size(182, 35);
             btnExit.TabIndex = 4;
-            btnExit.Text = "Exit";
-            btnExit.UseVisualStyleBackColor = true;
+            btnExit.Text = "❌:   Exit";
+            btnExit.UseVisualStyleBackColor = false;
             btnExit.Click += btnExit_Click;
             // 
             // label3
@@ -183,30 +187,21 @@
             label3.TabIndex = 4;
             label3.Text = "Actions";
             // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Font = new Font("Yu Gothic UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label4.Location = new Point(3, 236);
-            label4.Name = "label4";
-            label4.Size = new Size(56, 20);
-            label4.TabIndex = 5;
-            label4.Text = "Status :";
-            // 
             // lblStatus
             // 
             lblStatus.AutoSize = true;
-            lblStatus.Font = new Font("Yu Gothic UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblStatus.ForeColor = SystemColors.AppWorkspace;
-            lblStatus.Location = new Point(65, 236);
+            lblStatus.Font = new Font("Yu Gothic UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblStatus.Location = new Point(3, 236);
             lblStatus.Name = "lblStatus";
-            lblStatus.Size = new Size(0, 21);
-            lblStatus.TabIndex = 6;
+            lblStatus.Size = new Size(56, 20);
+            lblStatus.TabIndex = 5;
+            lblStatus.Text = "Status :";
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.FromArgb(240, 244, 248);
             ClientSize = new Size(592, 460);
             Controls.Add(label3);
             Controls.Add(label2);
@@ -238,7 +233,6 @@
         private Button btnDeleteNote;
         private Button btnViewAll;
         private Button btnExit;
-        private Label label4;
         private Label lblStatus;
     }
 }

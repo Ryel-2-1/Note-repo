@@ -40,24 +40,24 @@ namespace NoteApp1
 
         }
 
-     /*   private void Login()
-        {
-            string name = Microsoft.VisualBasic.Interaction.InputBox("Enter your name:", "Login", "");
+        /*   private void Login()
+           {
+               string name = Microsoft.VisualBasic.Interaction.InputBox("Enter your name:", "Login", "");
 
-            if (!string.IsNullOrWhiteSpace(name))
-            {
-                currentUser = name;
-                noteService.RegisterOrLoadUser(currentUser);
-                lblLoggedInUser.Text = $"Logged in as: {currentUser}";
-                LoadNotes();
-            }
-            else
-            {
-                MessageBox.Show("Name is required.");
-                Application.Exit();
-            }
-     }
-    */    
+               if (!string.IsNullOrWhiteSpace(name))
+               {
+                   currentUser = name;
+                   noteService.RegisterOrLoadUser(currentUser);
+                   lblLoggedInUser.Text = $"Logged in as: {currentUser}";
+                   LoadNotes();
+               }
+               else
+               {
+                   MessageBox.Show("Name is required.");
+                   Application.Exit();
+               }
+        }
+       */
 
         private void LoadNotes()
         {
@@ -83,7 +83,7 @@ namespace NoteApp1
                 string newUser = loginForm.EnteredUsername;
                 Form1 newMain = new Form1(newUser);
                 newMain.Show();
-                this.Close();
+                
             }
             else
             {
@@ -143,7 +143,7 @@ namespace NoteApp1
         {
             if (lstNotes.SelectedIndex >= 0)
             {
-                int index = lstNotes.SelectedIndex + 1; 
+                int index = lstNotes.SelectedIndex + 1;
                 bool success = noteService.UpdateNotes(Actions.DeleteNote, currentUser, index.ToString());
 
                 if (success)
