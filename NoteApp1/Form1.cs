@@ -40,25 +40,7 @@ namespace NoteApp1
 
         }
 
-        /*   private void Login()
-           {
-               string name = Microsoft.VisualBasic.Interaction.InputBox("Enter your name:", "Login", "");
-
-               if (!string.IsNullOrWhiteSpace(name))
-               {
-                   currentUser = name;
-                   noteService.RegisterOrLoadUser(currentUser);
-                   lblLoggedInUser.Text = $"Logged in as: {currentUser}";
-                   LoadNotes();
-               }
-               else
-               {
-                   MessageBox.Show("Name is required.");
-                   Application.Exit();
-               }
-        }
-       */
-
+     
         private void LoadNotes()
         {
             lstNotes.Items.Clear();
@@ -174,19 +156,7 @@ namespace NoteApp1
                 MessageBox.Show("No notes to display.");
             }
         }
-        /*       private void LoadNotes()
-               {
-                   lstNotes.Items.Clear();
-
-                  var notes = noteService.GetCurrentUserNote(currentUserName);
-                   foreach (var note in notes)
-                   {
-                       lstNotes.Items.Add(note);
-                   }
-                }
-           */
-
-
+    
 
         private void btnExit_Click(object sender, EventArgs e)
         {
