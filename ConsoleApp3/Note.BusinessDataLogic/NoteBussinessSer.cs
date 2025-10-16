@@ -37,8 +37,19 @@ namespace NoteService
                     Name = currentUser
                 };
                 userData.Notes.Add(input);
-                return dataService.AddNote(userData);
+
+                bool success = dataService.AddNote(userData);
+
+                if (success)
+                {
+                    
+                    var email = new EmailService();
+                    email.SendEmail(currentUser, input);
+                }
+
+                return success;
             }
+
 
             if (userAction == Actions.DeleteNote)
             {

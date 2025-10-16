@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using System.Net;
+using System.Net.Mail;
 using Note.Data;
 using NoteCommon;
 using NoteService;
