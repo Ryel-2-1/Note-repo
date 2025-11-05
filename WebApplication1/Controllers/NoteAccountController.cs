@@ -13,11 +13,17 @@ namespace WebApplication1.Controllers
     [ApiController]
     public class NoteAccountController : ControllerBase
     {
-        NoteBussinessSer noteBS = new NoteBussinessSer();
+        private readonly NoteBussinessSer _noteService;
+
+        public NoteAccountController(NoteBussinessSer noteService)
+        {
+            _noteService = noteService;
+        }
+
         [HttpGet]
         public IEnumerable<UserRecord> GetAccount()
         {
-            var account = noteBS.GetUserRecords();
+            var account = _noteService.GetUserRecords();
 
             return account;
         }
@@ -28,7 +34,7 @@ namespace WebApplication1.Controllers
         {
             var actions = Actions.AddNote;
 
-            var result = noteBS.UpdateNotes(actions, user, input);
+            var result = _noteService.UpdateNotes(actions, user, input);
 
             return result;
         }
@@ -38,7 +44,7 @@ namespace WebApplication1.Controllers
         {
             var actions = Actions.DeleteNote;
 
-            var result = noteBS.UpdateNotes(actions, user, input);
+            var result = _noteService.UpdateNotes(actions, user, input);
 
             return result;
         }
@@ -47,14 +53,14 @@ namespace WebApplication1.Controllers
         
         public bool UpdateNote(string user, int index, string input)
         {
-            return noteBS.UpdateNotes(user,index,input);
+            return _noteService.UpdateNotes(user,index,input);
         }
 
         [HttpPost("CreateAccount")]
 
         public void CreateAccount(string user)
         {
-            noteBS.RegisterOrLoadUser(user);
+            _noteService.RegisterOrLoadUser(user);
         }
     }
 

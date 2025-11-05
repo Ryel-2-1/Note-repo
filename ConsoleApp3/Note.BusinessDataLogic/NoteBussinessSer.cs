@@ -6,8 +6,16 @@ namespace NoteService
 {
     public class NoteBussinessSer
     {
+        private readonly NoteDataService.NoteDataService dataService = new NoteDataService.NoteDataService();
+        private readonly EmailService _emailService;
+
+        public NoteBussinessSer(EmailService emailService)
+        {
+            _emailService = emailService;
+        }
+
         string currentUser = null;
-        NoteDataService.NoteDataService dataService = new NoteDataService.NoteDataService();
+        
 
         public List<UserRecord> GetUserRecords()
         {
@@ -42,9 +50,9 @@ namespace NoteService
 
                 if (success)
                 {
-                    
-                    var email = new EmailService();
-                    email.SendEmail(currentUser, input);
+
+                    _emailService.SendEmail(currentUser, input);
+
                 }
 
                 return success;

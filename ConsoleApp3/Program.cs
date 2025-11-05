@@ -2,12 +2,15 @@
 using NoteCommon;
 using NoteDataService;
 using NoteService;
+using Microsoft.Extensions.Configuration;
 
 namespace NoteApp
 {
     internal class Program
     {
+        
         static NoteBussinessSer noteService = new NoteBussinessSer();
+
         static string userName;
         static string[] actions = new string[]
         {
